@@ -1,0 +1,121 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #101010;
+}
+
+/* ===========================
+    LIVROS PAGE STYLES
+=========================== */
+
+.container {
+  width: 70vw;
+  height: 80vh;
+  overflow: hidden;
+  display: flex;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  background-color: #131313;
+}
+
+/* ===========================
+   COMMON STYLES FOR FORMS
+=========================== */
+
+.image-side {
+  width: 50%;
+  background: url('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExdWhmN2k2eTJsaHViY3FuNW5ib3Zxa2VyNnNsZTRpZHV4aWdzdjJpcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/WoWm8YzFQJg5i/giphy.gif') center/cover no-repeat;
+  border-radius: 20px;
+}
+
+.form-side {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  position: relative;
+}
+
+.form {
+  width: 100%;
+  max-width: 300px;
+  transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
+  position: absolute;
+}
+
+.form h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  text-align: center;
+  color: white;
+}
+
+.form input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  color: white;
+  background-color: #404040;
+}
+
+.form button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: white;
+  color: black;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.button-container {
+  position: absolute;
+  top: 15px;
+  display: flex;
+  background-color: black;
+  width: 250px;
+  height: 40px;
+  align-items: center;
+  justify-content: space-around;
+  border-radius: 10px;
+}
+
+.button {
+  outline: 0 !important;
+  border: 0 !important;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transition: all ease-in-out 0.3s;
+  cursor: pointer;
+}
+
+.button:hover {
+  transform: translateY(-3px);
+}
+
+.icon {
+  font-size: 20px;
+}

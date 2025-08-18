@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "cpf": "123456",
+    "username": "gabriel",
+    "email": "gabriel@gmail.com"
+  },
+  {
+    "id": 2,
+    "cpf": "654321",
+    "username": "fulano",
+    "email": "fulano@gmail.com"
+  },
+  {
+    "id": 3,
+    "cpf": "222222",
+    "username": "Pedro",
+    "email": "pedro@gmail.com"
+  },
+  {
+    "id": 4,
+    "cpf": "111111",
+    "username": "Mcqueen",
+    "email": "McQueen@gmail.com"
+  },
+  {
+    "id": 5,
+    "cpf": "135",
+    "username": "gabriel",
+    "email": "gabriel@gmail.com"
+  },
+  {
+    "id": 6,
+    "cpf": "32",
+    "username": "fulano",
+    "email": "fulano@gmail.com"
+  },
+  {
+    "id": 7,
+    "cpf": "43",
+    "username": "23",
+    "email": "pedro@gmail.com"
+  },
+  {
+    "id": 8,
+    "cpf": "23",
+    "username": "2w",
+    "email": "fulano@gmail.com"
+  }
+]

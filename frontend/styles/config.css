@@ -1,0 +1,430 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #111;
+  color: #fff;
+  display: flex; /* lado a lado */
+  height: 100vh;
+}
+
+/* =========================
+    Nabar de navegação
+========================= */
+
+aside {
+  width: 220px;
+  background: #101010;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+aside h2 {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+aside ul {
+  list-style: none;
+  padding: 0;
+}
+
+aside ul li {
+  margin: 10px 0;
+}
+
+aside ul li a {
+  color: #fff;
+  text-decoration: none;
+  display: block;
+  padding: 10px;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+aside ul li a:hover {
+  background: #666;
+}
+
+/* =========================
+    Área principal
+========================= */
+
+main {
+  flex: 1; /* ocupa o resto da tela */
+  background:  #131313;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+main h1 {
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+
+/* =========================
+   Telas principais
+   (Usuário, Livro, Empréstimo)
+========================= */
+
+.main-user{
+  display: none;
+}
+
+.main-book{
+  display: none;
+}
+
+.main-loans{
+  display: none;
+}
+
+/* =========================
+    Caixa de pesquisa
+========================= */
+
+.search-box {
+  border-radius: 20px;
+  margin-bottom: 20px;
+  display: flex;
+}
+
+.search-box input {
+  width: 100%;
+  background-color: #1a1a1a;
+  border: none;
+  padding: 12px;
+  border-radius: 20px;
+  outline: none;
+  color: white;
+}
+
+.search-box input:focus {
+  animation: rotateShadow 2s infinite linear;
+}
+
+.search-button{
+  background-color: #aa00ff;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  cursor: pointer;
+  margin-left: -40px; /* sobrepõe o input */
+  transition: transform 0.3s ease-in;
+}
+
+.search-button svg:hover {
+  transform: scale(1.6);
+  transition: transform 0.3s ease;
+}
+
+/* =========================
+    Animação de sombra
+========================= */
+
+@keyframes rotateShadow {
+  0% {
+    box-shadow: -2px -2px 8px 1px #aa00ff, 2px 2px 8px 1px #3700ff;
+  }
+  25% {
+    box-shadow: -2px 2px 8px 1px #aa00ff, 2px -2px 8px 1px #3700ff;
+  }
+  50% {
+    box-shadow: 2px 2px 8px 1px #aa00ff, -2px -2px 8px 1px #3700ff;
+  }
+  75% {
+    box-shadow: 2px -2px 8px 1px #aa00ff, -2px 2px 8px 1px #3700ff;
+  }
+  100% {
+    box-shadow: -2px -2px 8px 1px #aa00ff, 2px 2px 8px 1px #3700ff;
+  }
+}
+
+/* =========================
+    Listas de Usuários e Livros
+========================= */
+
+.user-list {
+  background: #404040;
+  flex: 1; /* ocupa o espaço disponível */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+}
+
+.user-list h2 {
+  font-size: 28px;
+  text-align: center;
+}
+
+.book-list {
+  background: #404040;
+  flex: 1; /* ocupa o espaço disponível */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+}
+
+.book-list h2 {
+  font-size: 28px;
+  text-align: center;
+}
+
+/* =========================
+    Listas de Empréstimos
+========================= */
+
+.main-about{
+  .descricao-projeto{
+    text-align: justify;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    width: 850px;
+  }
+}
+
+.main-about .eyebrow {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #bbb;
+  margin-bottom: 0.5rem;
+}
+
+.main-about .title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.main-about .lead {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  color: #ddd;
+}
+
+/* =========================
+    Grid de cards de informações
+========================= */
+
+.about-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  margin-bottom: 2rem;
+}
+
+.main-about .card {
+  background: #1e1e1e;
+  padding: 1.5rem;
+  border-radius: 10px;
+  border: 1px solid #2a2a2a;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.main-about .card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+}
+
+.main-about .card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #fff; /* cor de destaque (pode trocar pela tua identidade visual) */
+}
+
+.main-about .list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.main-about .list li {
+  margin-bottom: 0.5rem;
+  padding-left: 1.2rem;
+  position: relative;
+  font-size: 0.95rem;
+  color: #ccc;
+}
+
+.main-about .list li::before {
+  content: "✔";
+  position: absolute;
+  left: 0;
+  color: #5CE65C;
+  font-size: 0.9rem;
+}
+
+/* Informações extras */
+.main-about .meta {
+  border-top: 1px solid #2a2a2a;
+  padding-top: 1rem;
+  font-size: 0.9rem;
+  color: #bbb;
+  margin-bottom: 20px;
+}
+
+.main-about .meta p {
+  margin: 0.3rem 0;
+}
+
+/* ===========================
+   Cards de redes sociais
+=========================== */
+
+.cards {
+  height: auto;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+  transition: all 200ms ease-in-out;
+}
+
+.card-container {
+  --font-color: hsl(0, 0%, 15%);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  transition: all 200ms ease-in-out;
+}
+
+.card-container {
+  position: relative;
+  width: 250px;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5em 1em;
+  border-radius: 0.5em;
+  cursor: pointer;
+}
+
+.card-container .icon-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.card-container .icon-container svg {
+  width: 30px;
+  height: 30px;
+}
+
+.card-container .icon-container p {
+  font-size: 0.9em;
+  font-weight: 400;
+}
+
+.card-container p {
+  font-weight: 600;
+}
+
+.twitter-card {
+  background-color: hsl(0, 0%, 0%);
+  color: hsl(0, 0%, 100%);
+}
+
+.facebook-card {
+  background-color: hsl(220, 100%, 60%);
+  color: hsl(0, 0%, 100%);
+}
+
+.instagram-card {
+  background-color: hsl(350, 100%, 60%);
+  color: hsl(0, 0%, 100%);
+}
+
+.card-container:hover {
+  transform: scale(1.1);
+  z-index: 1;
+}
+
+.cards:hover > .card-container:not(:hover) {
+  filter: blur(5px);
+}
+
+/* =========================
+    Botão de logout
+========================= */
+
+.logout-button {
+  position: relative;
+  padding: 10px 20px;
+  border-radius: 7px;
+  border: 1px solid rgb(61, 106, 255);
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 2px;
+  background: transparent;
+  color: #fff;
+  overflow: hidden;
+  box-shadow: 0 0 0 0 transparent;
+  -webkit-transition: all 0.2s ease-in;
+  -moz-transition: all 0.2s ease-in;
+  transition: all 0.2s ease-in;
+}
+
+.logout-button:hover {
+  background: rgb(61, 106, 255);
+  box-shadow: 0 0 30px 5px rgba(0, 142, 236, 0.815);
+  -webkit-transition: all 0.2s ease-out;
+  -moz-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+}
+
+.logout-button:hover::before {
+  -webkit-animation: sh02 0.5s 0s linear;
+  -moz-animation: sh02 0.5s 0s linear;
+  animation: sh02 0.5s 0s linear;
+}
+
+.logout-button::before {
+  content: '';
+  display: block;
+  width: 0px;
+  height: 86%;
+  position: absolute;
+  top: 7%;
+  left: 0%;
+  opacity: 0;
+  background: #fff;
+  box-shadow: 0 0 50px 30px #fff;
+  -webkit-transform: skewX(-20deg);
+  -moz-transform: skewX(-20deg);
+  -ms-transform: skewX(-20deg);
+  -o-transform: skewX(-20deg);
+  transform: skewX(-20deg);
+}
+
+@keyframes sh02 {
+  from {
+    opacity: 0;
+    left: 0%;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    left: 100%;
+  }
+}
+
+.logout-button:active {
+  box-shadow: 0 0 0 0 transparent;
+  -webkit-transition: box-shadow 0.2s ease-in;
+  -moz-transition: box-shadow 0.2s ease-in;
+  transition: box-shadow 0.2s ease-in;
+}

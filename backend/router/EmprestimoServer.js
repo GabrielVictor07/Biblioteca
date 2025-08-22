@@ -1,93 +1,111 @@
+const express = require('express');
+const router = express.Router();
+const db = require('../db');
 
-//=========================
-// EMPRESTIMO SERVER
-// =========================
-// Importa bibliotecas necessárias
-const apiUrl = 'http://localhost:3000/loans';
-const form = document.getElementById('formEmprestimo');
-const tbody = document.querySelector('.table-container tbody');
+// =======================
+// POST /loans - criar empréstimo
+// =======================
+router.post('/', (req, res) => {
+  let { userId, bookId, date, returnDate, status } = req.body;
 
-//=========================
-// FUNÇÕES UTILITÁRIAS
-// =========================
-// Formata a data para o formato DD/MM/YYYY
+  if (!userId || !bookId || !date) {
+    return res.status(400).json({ error: 'userId, bookId e date são obrigatórios' });
+  }
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
+  db.query(
+    'INSERT INTO loans_tb (userId, bookId, date, returnDate, status) VALUES (?, ?, ?, ?, ?)',
+    [userId, bookId, date, returnDate || null, status || 'pendente'],
+    (err, result) => {
+      if (err) {
+        console.error('Erro ao criar empréstimo:', err);
+        return res.status(500).json({ error: 'Erro ao criar empréstimo' });
+      }
 
-  const userId = parseInt(document.getElementById('idUsuario').value);
-  const bookId = parseInt(document.getElementById('idLivro').value);
-  const dataEmprestimo = document.getElementById('dataEmprestimo').value;
-  const dataDevolucao = document.getElementById('dataDevolucao').value;
-
-  try {
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+      res.status(201).json({
+        id: result.insertId,
         userId,
         bookId,
-        date: dataEmprestimo,
-        returnDate: dataDevolucao,
-        status: 'pendente'
-      })
-    });
-
-    if (!response.ok) throw new Error('Erro ao cadastrar empréstimo');
-
-    const emprestimo = await response.json();
-    form.reset();
-    addLoanToUI(emprestimo);
-    alert('Empréstimo cadastrado com sucesso!');
-  } catch (err) {
-    console.error(err);
-    alert('Erro ao cadastrar empréstimo.');
-  }
+        date,
+        returnDate: returnDate || null,
+        status: status || 'pendente'
+      });
+    }
+  );
 });
 
-//=========================
-// ADICIONAR EMPRÉSTIMO NA TABELA
-// =========================
-// Adiciona um empréstimo na tabela
+// =======================
+// GET /loans - listar todos empréstimos
+// =======================
+router.get('/', (req, res) => {
+  db.query('SELECT * FROM loans_tb', (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar empréstimos:', err);
+      return res.status(500).json({ error: 'Erro ao buscar empréstimos' });
+    }
+    res.json(results);
+  });
+});
 
-function addLoanToUI(loan) {
-  const tr = document.createElement('tr');
+// =======================
+// PUT /loans/:id - atualizar empréstimo (devolução)
+// =======================
+router.put('/:id', (req, res) => {
+  const { id } = req.params;
+  const { returnDate, status } = req.body;
 
-  tr.innerHTML = `
-    <td>${loan.userId}</td>
-    <td>${loan.bookId}</td>
-    <td>${formatDate(loan.date)}</td>
-    <td>${formatDate(loan.returnDate)}</td>
-    <td>${loan.status}</td>
-  `;
+  db.query(
+    'UPDATE loans_tb SET returnDate = ?, status = ? WHERE id = ?',
+    [returnDate, status, id],
+    (err, result) => {
+      if (err) {
+        console.error('Erro ao atualizar empréstimo:', err);
+        return res.status(500).json({ error: 'Erro ao atualizar empréstimo' });
+      }
+      if (result.affectedRows === 0) return res.status(404).json({ error: 'Empréstimo não encontrado' });
 
-  tbody.appendChild(tr);
-}
+      res.json({ id: Number(id), returnDate, status });
+    }
+  );
+});
 
-function formatDate(dateString) {
-  if (!dateString) return '--';
-  const date = new Date(dateString);
-  if (isNaN(date)) return dateString;
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
-}
+// =======================
+// DELETE /loans/:id - deletar empréstimo
+// =======================
+router.delete('/:id', (req, res) => {
+  const { id } = req.params;
 
-// =========================
-// CARREGAR EMPRÉSTIMOS
-// =========================
-// Carrega todos os empréstimos e os adiciona na tabela
+  db.query('DELETE FROM loans_tb WHERE id = ?', [id], (err, result) => {
+    if (err) {
+      console.error('Erro ao deletar empréstimo:', err);
+      return res.status(500).json({ error: 'Erro ao deletar empréstimo' });
+    }
+    if (result.affectedRows === 0) return res.status(404).json({ error: 'Empréstimo não encontrado' });
 
-async function loadLoans() {
-  try {
-    const response = await fetch(apiUrl);
-    const loans = await response.json();
-    loans.forEach(loan => addLoanToUI(loan));
-  } catch (err) {
-    console.error('Erro ao carregar empréstimos:', err);
-  }
-}
+    res.json({ message: 'Empréstimo deletado com sucesso', id: Number(id) });
+  });
+});
 
-// Inicia o carregamento dos empréstimos
-loadLoans();
+
+router.put('/:id', (req, res) => {
+  const { id } = req.params;
+  let { returnDate, status } = req.body;
+  
+  if (!returnDate) returnDate = new Date().toISOString();
+  if (!status) status = 'entregue';
+
+  db.query(
+    'UPDATE loans_tb SET returnDate = ?, status = ? WHERE id = ?',
+    [returnDate, status, id],
+    (err, result) => {
+      if (err) {
+        console.error('Erro ao atualizar empréstimo:', err);
+        return res.status(500).json({ error: 'Erro ao atualizar empréstimo' });
+      }
+      if (result.affectedRows === 0) return res.status(404).json({ error: 'Empréstimo não encontrado' });
+
+      res.json({ id: Number(id), returnDate, status });
+    }
+  );
+});
+
+module.exports = router;

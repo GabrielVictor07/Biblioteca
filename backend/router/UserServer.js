@@ -1,103 +1,53 @@
-
-// =========================
-// IMPORTAÇÕES E CONFIGS
-// =========================
-// Importa bibliotecas necessárias
 const express = require('express');
-const cors = require('cors');
-const fs = require('fs');
-const path = require('path');
+const router = express.Router();
+const db = require('../db');
 
-const app = express();
-const port = 3000;
-const USERS_FILE = path.join(__dirname, 'users.json');
+// =======================
+// POST /users - criar usuário
+// =======================
+router.post('/', (req, res) => {
+  const { nome, email, cpf } = req.body;
 
-app.use(cors()); 
-app.use(express.json());
-
-// =========================
-// FUNÇÕES UTILITÁRIAS
-// =========================
-// Lê usuários do arquivo JSON
-function readUsers() {
-  try {
-    const data = fs.readFileSync(USERS_FILE, 'utf8');
-    return JSON.parse(data);
-  } catch (err) {
-    return [];
+  // Validação simples
+  if (!nome || !email || !cpf) {
+    return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
   }
-}
 
-// Salva usuários no arquivo JSON
-function writeUsers(users) {
-  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), 'utf8');
-}
+  db.query(
+    'INSERT INTO user_tb (nome, email, cpf) VALUES (?, ?, ?)',
+    [nome, email, cpf],
+    (err, result) => {
+      if (err) {
+        console.error('Erro ao inserir usuário:', err);
+        // Mensagem mais amigável se for CPF ou email duplicado
+        if (err.code === 'ER_DUP_ENTRY') {
+          return res.status(400).json({ error: 'Email ou CPF já cadastrado' });
+        }
+        return res.status(500).json({ error: 'Erro ao inserir usuário no banco' });
+      }
 
-// =========================
-// ROTAS DE USUÁRIO
-// =========================
-
-// Cadastrar novo usuário
-app.post('/users', (req, res) => {
-  const { cpf, username, email } = req.body;
-  const user = {
-    id: cpf,
-    nome: username,
-    livro: email,
-    data: new Date().toISOString(),
-  };
-  const users = readUsers();
-  users.push(user);
-  writeUsers(users);
-  res.status(201).json(user);
+      res.status(201).json({
+        id: result.insertId,
+        nome,
+        email,
+        cpf,
+        data_cadastro: new Date() // ou pegar do banco se quiser SELECT depois
+      });
+    }
+  );
 });
 
-// Listar todos os usuários
-app.get('/users', (req, res) => {
-  const users = readUsers();
-  res.status(200).json(users);
+// =======================
+// GET /users - listar todos
+// =======================
+router.get('/', (req, res) => {
+  db.query('SELECT id, nome, email, cpf, data_cadastro FROM user_tb', (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar usuários:', err);
+      return res.status(500).json({ error: 'Erro ao buscar usuários' });
+    }
+    res.json(results);
+  });
 });
 
-// Buscar usuário por CPF (id)
-app.get('/users/:cpf', (req, res) => {
-  const { cpf } = req.params;
-  const users = readUsers();
-  const user = users.find(u => u.id === cpf);
-  if (user) {
-    res.status(200).json(user);
-  } else {
-    res.status(404).json({ mensagem: 'Usuário não encontrado' });
-  }
-});
-
-// Editar usuário pelo CPF (id)
-app.put('/users/:id', (req, res) => {
-  const { id } = req.params;
-  const { username, email } = req.body;
-  let users = readUsers();
-  const userIndex = users.findIndex(u => u.id === id);
-  if (userIndex !== -1) {
-    users[userIndex].nome = username || users[userIndex].nome;
-    users[userIndex].livro = email || users[userIndex].livro;
-    writeUsers(users);
-    res.status(200).json(users[userIndex]);
-  } else {
-    res.status(404).json({ mensagem: 'Usuário não encontrado' });
-  }
-});
-
-// Deletar usuário pelo CPF (id)
-app.delete('/users/:id', (req, res) => {
-  const { id } = req.params;
-  let users = readUsers();
-  users = users.filter(user => user.id !== id);
-  writeUsers(users);
-  res.status(204).send();
-});
-
-// =========================
-// INICIAR SERVIDOR
-// =========================
-app.listen(port, () => {
-  console.log(`User Server running at http://localhost:${port}`);
-});
+module.exports = router;

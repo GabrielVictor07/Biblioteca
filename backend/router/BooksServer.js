@@ -1,102 +1,89 @@
-
-//========================
-// SERVIDOR DE LIVROS
-//========================
 const express = require('express');
-const cors = require('cors');
-const fs = require('fs');
-const path = require('path');
+const router = express.Router();
+const db = require('../db');
 
-const app = express();
-const port = 3000;
-const BOOKS_FILE = path.join(__dirname, 'books.json');
+// =======================
+// POST /books - criar livro
+// =======================
+router.post('/', (req, res) => {
+  const { titulo, autor, genero, ano } = req.body;
+  console.log('REQ BODY:', req.body);
 
-app.use(cors());
-app.use(express.json());
-
-// FUNÇÕES UTILITÁRIAS
-// Lê livros do arquivo JSON
-
-function readBooks() {
-  try {
-    const data = fs.readFileSync(BOOKS_FILE, 'utf8');
-    return JSON.parse(data);
-  } catch (err) {
-    return [];
+  if (!titulo || !autor || !genero || !ano) {
+    return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
   }
-}
 
-// Salva livros no arquivo JSON
-function writeBooks(books) {
-  fs.writeFileSync(BOOKS_FILE, JSON.stringify(books, null, 2), 'utf8');
-}
+  db.query(
+    'INSERT INTO book_tb (titulo, autor, genero, ano) VALUES (?, ?, ?, ?)',
+    [titulo, autor, genero, ano],
+    (err, result) => {
+      if (err) {
+        console.error('Erro ao inserir livro:', err);
+        return res.status(500).json({ error: 'Erro ao inserir livro no banco' });
+      }
 
-// ROTAS DE LIVROS
-// Cadastrar novo livro
-
-app.post('/books', (req, res) => {
-  const { id, titulo, autor, genero, ano } = req.body;
-  const book = {
-    id: id,
-    titulo: titulo,
-    autor: autor,
-    genero: genero,
-    ano: ano,
-    data: new Date().toISOString(),
-  };
-  const books = readBooks();
-  books.push(book);
-  writeBooks(books);
-  res.status(201).json(book);
+      res.status(201).json({
+        id: result.insertId,
+        titulo,
+        autor,
+        genero,
+        ano
+      });
+    }
+  );
 });
 
-// Listar todos os livros
-app.get('/books', (req, res) => {
-  const books = readBooks();
-  res.status(200).json(books);
+// =======================
+// GET /books - listar todos
+// =======================
+router.get('/', (req, res) => {
+  db.query('SELECT * FROM book_tb', (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar livros:', err);
+      return res.status(500).json({ error: 'Erro ao buscar livros' });
+    }
+    res.json(results);
+  });
 });
 
-// Buscar livro por ID
-app.get('/books/:id', (req, res) => {
+// =======================
+// GET /books/:id - buscar por ID
+// =======================
+router.get('/:id', (req, res) => {
   const { id } = req.params;
-  const books = readBooks();
-  const book = books.find(b => b.id === id);
-  if (book) {
-    res.status(200).json(book);
-  } else {
-    res.status(404).json({ message: 'Livro não encontrado' });
-  }
+  db.query('SELECT * FROM book_tb WHERE id = ?', [id], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar livro por ID:', err);
+      return res.status(500).json({ error: 'Erro ao buscar livro' });
+    }
+    if (results.length === 0) return res.status(404).json({ message: 'Livro não encontrado' });
+    res.json(results[0]);
+  });
 });
 
-// Editar livro pelo ID
-app.put('/books/:id', (req, res) => {
+// =======================
+// PUT /books/:id - atualizar livro
+// =======================
+router.put('/:id', (req, res) => {
   const { id } = req.params;
   const { titulo, autor, genero, ano } = req.body;
-  const books = readBooks();
-  const bookIndex = books.findIndex(b => b.id === id);
-  if (bookIndex !== -1) {
-    books[bookIndex] = { ...books[bookIndex], titulo, autor, genero, ano };
-    writeBooks(books);
-    res.status(200).json(books[bookIndex]);
-  } else {
-    res.status(404).json({ message: 'Livro não encontrado' });
+
+  if (!titulo || !autor || !genero || !ano) {
+    return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
   }
+
+  db.query(
+    'UPDATE book_tb SET titulo = ?, autor = ?, genero = ?, ano = ? WHERE id = ?',
+    [titulo, autor, genero, ano, id],
+    (err, result) => {
+      if (err) {
+        console.error('Erro ao atualizar livro:', err);
+        return res.status(500).json({ error: 'Erro ao atualizar livro' });
+      }
+      if (result.affectedRows === 0) return res.status(404).json({ message: 'Livro não encontrado' });
+      res.json({ id: Number(id), titulo, autor, genero, ano });
+    }
+  );
 });
 
-// Deletar livro pelo ID
-app.delete('/books/:id', (req, res) => {
-  const { id } = req.params;
-  let books = readBooks();
-  const bookIndex = books.findIndex(b => b.id === id);
-  if (bookIndex !== -1) {
-    const deletedBook = books.splice(bookIndex, 1);
-    writeBooks(books);
-    res.status(200).json(deletedBook[0]);
-  } else {
-    res.status(404).json({ message: 'Livro não encontrado' });
-  }
-});
-
-app.listen(port, () => {
-  console.log(`Books server running at http://localhost:${port}`);
-});
+module.exports = router;

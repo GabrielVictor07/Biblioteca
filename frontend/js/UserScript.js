@@ -1,39 +1,34 @@
 const apiUrl = 'http://localhost:3000/users';
-
-const form = document.querySelector('.login-form'); 
+const form = document.querySelector('.login-form');
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const taskInput = document.getElementById('cpfInput').value
-  const usernameInput = document.getElementById('usernameInput').value;
+  const cpfInput = document.getElementById('cpfInput').value;
+  const nomeInput = document.getElementById('usernameInput').value;
   const emailInput = document.getElementById('emailInput').value;
 
   try {
     const response = await fetch(apiUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        cpf: taskInput,
-        username: usernameInput,
+        nome: nomeInput,
         email: emailInput,
+        cpf: cpfInput,
       }),
     });
 
-    if (!response.ok) {
-      throw new Error('A resposta da rede não foi bem-sucedida');
-    }
+    if (!response.ok) throw new Error('Erro na requisição');
 
     const user = await response.json();
     form.reset();
     console.log('Success:', user);
+
     const notificationCard = document.querySelector('.notification-card');
-    notificationCard.style.display = 'block';
+    if (notificationCard) notificationCard.style.display = 'block';
   } catch (error) {
     console.error('Error:', error);
     alert('Erro ao cadastrar usuário. Tente novamente.');
   }
 });
-

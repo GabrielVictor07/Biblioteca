@@ -1,35 +1,47 @@
-const apiUrl = 'http://localhost:3000/books'; // porta 3001!
+const apiUrl = 'http://localhost:3000/books';
 
-const form = document.querySelector('.books-form'); 
+const form = document.querySelector('.books-form');
 
 form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const tituloInput = document.getElementById('tituloLivro').value;
-    const autorInput = document.getElementById('autorLivro').value;
-    const generoInput = document.getElementById('generoLivro').value;
-    const anoInput = document.getElementById('anoPublicacao').value;
+  const tituloInput = document.getElementById('tituloLivro')?.value.trim();
+  const autorInput = document.getElementById('autorLivro')?.value.trim();
+  const generoInput = document.getElementById('generoLivro')?.value.trim();
+  const anoInput = document.getElementById('anoPublicacao')?.value;
 
-    try {
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                titulo: tituloInput,
-                autor: autorInput,
-                genero: generoInput,
-                ano: anoInput,
-            }),
-        });
+  if (!tituloInput || !autorInput || !generoInput || !anoInput) {
+    alert('Preencha todos os campos corretamente!');
+    return;
+  }
 
-        if (!response.ok) throw new Error('Erro na requisição');
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        titulo: tituloInput,
+        autor: autorInput,
+        genero: generoInput,
+        ano: anoInput, // <-- agora certo
+      }),
+    });
 
-        const livro = await response.json();
-        form.reset();
-        console.log('Success:', livro);
-        alert('Livro cadastrado com sucesso!');
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Erro ao cadastrar livro. Tente novamente.');
-    }
+    if (!response.ok) throw new Error('Erro na requisição');
+
+    const livro = await response.json();
+    form.reset();
+    console.log('Success:', livro);
+    alert('Livro cadastrado com sucesso!');
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Erro ao cadastrar livro. Tente novamente.');
+  }
+});
+
+console.log('DADOS ENVIADOS:', {
+  titulo: tituloInput,
+  autor: autorInput,
+  genero: generoInput,
+  ano: Number(anoInput) // ou getFullYear()
 });

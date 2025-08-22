@@ -1,3 +1,21 @@
+:root{
+  --primary-color: #eb214e;
+  --secondary-color: #f5a623;
+  --background-color: #1a1623;
+  --text-color: #fff;
+  --text-colot-dark: #000;
+  --accent-color: #21ebba;
+
+  --font-family: 'Roboto Condensed', sans-serif;
+  --font-size: 16px;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition-duration: 0.3s;
+  --transition-ease: ease-in-out;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
 * {
   margin: 0;
   padding: 0;

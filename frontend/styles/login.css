@@ -1,3 +1,22 @@
+:root{
+  --primary-color: #100d17;
+  --secondary-color: #f5a623;
+  --background-color: #1a1623;
+  --text-color: #fff;
+  --text-colot-dark: #000;
+  --accent-color: #21ebba;
+
+  --font-family: 'Roboto Condensed', sans-serif;
+  --font-size: 16px;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition-duration: 0.3s;
+  --transition-ease: ease-in-out;
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -10,11 +29,11 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #101010;
+  background-color: var(--background-color);
 }
 
 /* ===========================
-    LIVROS PAGE STYLES
+    user PAGE STYLES
 =========================== */
 
 .container {
@@ -24,7 +43,7 @@ body {
   display: flex;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
-  background-color: #131313;
+  background-color: var(--primary-color);
 }
 
 /* ===========================
@@ -83,41 +102,6 @@ body {
   cursor: pointer;
   margin-top: 10px;
   font-weight: bold;
-}
-
-.button-container {
-  position: absolute;
-  top: 15px;
-  display: flex;
-  background-color: black;
-  width: 250px;
-  height: 40px;
-  align-items: center;
-  justify-content: space-around;
-  border-radius: 10px;
-}
-
-.button {
-  outline: 0 !important;
-  border: 0 !important;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  transition: all ease-in-out 0.3s;
-  cursor: pointer;
-}
-
-.button:hover {
-  transform: translateY(-3px);
-}
-
-.icon {
-  font-size: 20px;
 }
 
 /* ===========================
@@ -212,4 +196,74 @@ body {
   to {
     transform: scale(1.09);
   }
+}
+
+/* ===========================
+    SIDEBAR STYLES]
+=========================== */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 70px; /* recolhida (só ícones) */
+  background: #100d17;
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
+.logo-library{
+  font-size: 12px;
+  text-align: center;
+  margin-top: 10px;
+  text-transform: uppercase;
+  flex-wrap: wrap;
+  color: var(--text-color);
+}
+
+/* Expande ao passar o mouse */
+.sidebar:hover {
+  width: 200px;
+}
+
+.sidebar ul a{
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul a li {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.sidebar ul a li:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.sidebar ul li i {
+  font-size: 20px;
+  min-width: 40px;
+  text-align: center;
+}
+
+.sidebar ul li span {
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Mostra texto só quando expandida */
+.sidebar:hover ul li span {
+  opacity: 1;
 }

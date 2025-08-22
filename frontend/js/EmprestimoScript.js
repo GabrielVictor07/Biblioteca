@@ -94,7 +94,7 @@ function addLoanToUI(emprestimo, usuarioNome, livroTitulo) {
   }
 
   tr.innerHTML = `
-    <td>${usuarioNome || ''}</td>
+    <td class="name-user-tb" ><strong>${usuarioNome || ''}</strong></td>
     <td>${livroTitulo || ''}</td>
     <td>${formatDate(emprestimo.date)}</td>
     <td class="td-returnDate">${formatDate(emprestimo.returnDate)}</td>
@@ -208,3 +208,9 @@ async function loadLoans() {
 }
 
 loadLoans();
+
+function newEmprestimo() {
+    const formContainer = document.querySelector('.form-container');
+    formContainer.style.display = 'flex'; // Exibe o formulário
+    form.reset(); // Limpa os campos do formulário
+}

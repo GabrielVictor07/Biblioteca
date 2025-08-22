@@ -8,7 +8,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const port = 3001;
+const port = 3000;
 const BOOKS_FILE = path.join(__dirname, 'books.json');
 
 app.use(cors());

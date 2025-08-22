@@ -46,5 +46,41 @@
     "cpf": "23",
     "username": "2w",
     "email": "fulano@gmail.com"
+  },
+  {
+    "id": 9,
+    "cpf": "123",
+    "username": "tgf",
+    "email": "gabrie@gmail.com"
+  },
+  {
+    "id": 10,
+    "cpf": "12345678",
+    "username": "Mcqueen",
+    "email": "McQueen@gmail.com"
+  },
+  {
+    "id": 11,
+    "cpf": "123",
+    "username": "fulano",
+    "email": "McQueen@gmail.com"
+  },
+  {
+    "id": 12,
+    "cpf": "2332",
+    "username": "Pedro",
+    "email": "cr7@gmail.com"
+  },
+  {
+    "id": 13,
+    "cpf": "3234",
+    "username": "Pedro",
+    "email": "fulano@gmail.com"
+  },
+  {
+    "id": 14,
+    "cpf": "5443",
+    "username": "Mcqueen",
+    "email": "McQueen@gmail.com"
   }
 ]

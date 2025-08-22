@@ -42,6 +42,7 @@ app.post('/users', (req, res) => {
 });
 
 // -------------------- BOOKS --------------------
+
 app.get('/books', (req, res) => res.json(readJSON(BOOKS_FILE)));
 
 app.post('/books', (req, res) => {
@@ -55,6 +56,7 @@ app.post('/books', (req, res) => {
 });
 
 // -------------------- LOANS --------------------
+
 app.get('/loans', (req, res) => res.json(readJSON(LOANS_FILE)));
 
 app.post('/loans', (req, res) => {

@@ -24,9 +24,7 @@ form.addEventListener('submit', async (e) => {
     const user = await response.json();
     form.reset();
     console.log('Success:', user);
-
-    const notificationCard = document.querySelector('.notification-card');
-    if (notificationCard) notificationCard.style.display = 'block';
+    alert("CADASTRADO COM SUCESSO")
   } catch (error) {
     console.error('Error:', error);
     alert('Erro ao cadastrar usuário. Tente novamente.');
